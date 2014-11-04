@@ -26,12 +26,16 @@ countTokens :: String -> [(Int, String)]
 countTokens = countRuns . sort . tokens . map toLower
 
 -- Take the n most occurences of tokens in String s (see countTokens).
-commonWords n s = take n $ reverse $ countTokens s
+commonWords 0 s = countTokens s
+commonWords n s = take n $ reverse $ commonWords 0 s
 
 -- Main program
 main =
-  do putStrLn "Input text?"
-     text <- getLine
-     putStrLn "How many words?"
+  do putStr "Input file? "
+     inFile <- getLine
+     putStr "Output file? "
+     outfile <- getLine
+     putStr "Word limit? (0: infinity) "
      n <- getLine
-     putStrLn (intercalate "\n" (map (\ (x, y) -> (show x) ++ ": " ++ y) (commonWords (read n) text)))
+     putStrLn "Ok"
+     --putStrLn (intercalate "\n" (map (\ (x, y) -> (show x) ++ ": " ++ y) (commonWords (read n) text)))
