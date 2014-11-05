@@ -1,7 +1,13 @@
 module Main where
 
+import Control.Monad
 import Data.Char
 import Data.List
+import System.Console.GetOpt
+import System.Environment
+import System.Exit
+import System.IO
+import Text.Printf
 
 -- Split a string by splitting it along a predicate
 split :: (Char -> Bool) -> String -> [String]
@@ -40,7 +46,22 @@ commonWords n s = take n $ reverse $ commonWords 0 s
 showCommonWords :: Int -> String -> String
 showCommonWords n = concat . map showTokenCount . take n . countTokens
 
--- Main program
+-- Possible command line flags
+data Flag = Output String | Input String | Help
+options :: [OptDescr Flag]
+options =
+    [ Option ['o'] ["output"] (OptArg Output "FILE") "Output file"
+    , Option ['i'] ["input"] (ReqArg Input "FILE") "Input file"
+    , Option ['h'] ["help"] (NoArg Help) "Show help"
+    ]
+
+cliOpts :: [String] -> IO ([Flag], [String])
+cliOpts argv = case getOpt Permute options argv of
+                    (o, n, []  ) -> return (o, n)
+                    (_, _, errs) -> ioError (userError (concat errs ++ usageInfo header options))
+                                    where header = "Usage: intro [OPTION...]"
+
+-- Main program (old)
 main =
   do putStrLn "Input file? "
      inFile <- getLine
