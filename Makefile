@@ -1,5 +1,5 @@
-SOURCES = intro.hs
-TARGETS = intro
+SOURCES = intro.hs countdown.hs
+TARGETS = intro countdown
 
 HC = ghc
 
@@ -8,6 +8,9 @@ HC = ghc
 all: $(TARGETS)
 
 intro: intro.o
+	$(HC) $< -o $@
+
+countdown: countdown.o
 	$(HC) $< -o $@
 
 %.o: %.hs
