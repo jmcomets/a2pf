@@ -1,7 +1,3 @@
 # Compile files
 *.hi
 *.o
-
-# Binaries
-intro
-countdown
